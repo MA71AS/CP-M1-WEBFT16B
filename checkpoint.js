@@ -39,7 +39,19 @@ const {
 
 var isAncestor = function(genealogyTree, ancestor, descendant){
   // Tu código aca:
-
+  while(genealogyTree[ancestor].length <= 0) {
+    return false;
+  }
+  for (let i=0; i < genealogyTree[ancestor].length; i++) {
+    let resultado = genealogyTree[ancestor][i];
+    if(resultado === descendant) {
+      return true;
+    }
+    while (genealogyTree[resultado].length > 0) {
+      return isAncestor(genealogyTree, resultado, descendant);
+    }
+  }
+  return false;
 }
 
 
@@ -77,7 +89,18 @@ var isAncestor = function(genealogyTree, ancestor, descendant){
 
 function secuenciaHenry(obj, n) {
   // Tu código aca:
-
+  if(n < 0) {
+    return null;
+  }
+  if (n === 0) {
+    return obj.first;
+  }
+  if (n === 1) {
+    return Object.keys(obj).length;
+  }
+  if (n > 1) {
+    return secuenciaHenry(obj, n -1) * secuenciaHenry(obj, n - 2) - secuenciaHenry(obj, n - 2);
+  }
 }
 
 // ---------------------
@@ -98,7 +121,16 @@ function secuenciaHenry(obj, n) {
 
 LinkedList.prototype.size = function(){
   // Tu código aca:
-
+  var nodeActual = this.head
+  if(nodeActual === null) {
+    return 0;
+  }
+  var size = 1;
+  while(nodeActual.next !== null) {
+    size++;
+    nodeActual = nodeActual.next;
+  }
+  return size;
 }
 
 
@@ -119,7 +151,6 @@ LinkedList.prototype.size = function(){
 
 LinkedList.prototype.switchPos = function(pos1, pos2){
   // Tu código aca:
-
 }
 
 // EJERCICIO 5
@@ -207,7 +238,22 @@ var cardGame = function(playerOneCards, playerTwoCards){
 
 BinarySearchTree.prototype.height = function(){
   // Tu código aca:
+  if (!this.value) {
+    return 0;
+  }
+  if (this.left === null && this.right === null) {
+    return 1;
+  }
+  if (this.left === null) {
+    return 1 + this.right.height();
+  }
+  if (this.right === null) {
+    return 1 + this.left.height();
+  }
+  var left = this.left.height();
+  var right = this.right.height();
 
+  return 1 + Math.max(left, right);
 }
 
 
@@ -257,7 +303,19 @@ var binarySearch = function (array, target) {
 
 var specialSort = function(array, orderFunction) {
   // Tu código aca:
-
+  let change = true;
+  while (change) {
+    change = false;
+    for (let i=0; i < array.length - 1; i++) {
+      if (orderFunction(array[i], array[i + 1]) === -1) {
+        let resultado = array[i];
+        array[i] = array[i + 1];
+        array[i + 1] = resultado;
+        change = true;
+      }
+    }
+  }
+  return array;
 }
 
 // ----- Closures -----
@@ -290,7 +348,19 @@ var specialSort = function(array, orderFunction) {
 
 function closureDetect(symptoms, min) {
   // Tu código aca:
+  return function(persona) {
+    let contador = 0;
+    // Recorremos el arreglo de sintomas de la persona
+    for (let i = 0; i < persona.symptoms.length; i++) {
+    
+      // Si el sintoma esta en los establecidos
+      if (symptoms.includes(persona.symptoms[i])) contador++;
 
+      // Si alcanzamos el minimo, dejamos de buscar
+      if (contador >= min) return true;
+    }
+    return false;
+  }
 }
 
 // -------------------
